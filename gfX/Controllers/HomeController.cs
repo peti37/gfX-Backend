@@ -5,14 +5,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using gfX.Models;
+using gfX.Interfaces;
 
 namespace gfX.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private ICrudRepositories<User> userRepo;
+
+        public HomeController(ICrudRepositories<User> userRepo)
         {
-            return View();
+            this.userRepo = userRepo;
         }
+
+        [HttpGet("")]
+        public async Task<IActionResult> Index()
+        {
+            var listOfUsers = await userRepo.SelectAll();
+            return Ok(listOfUsers);
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> Index([FromBody]User user)
+        {
+            await userRepo.Create(user);
+            return RedirectToAction("Index");   
+        }
+
     }
 }
