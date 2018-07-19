@@ -32,9 +32,12 @@ namespace gfX.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<User>> FilterByField(string fieldName, string fieldValue)
+        public async Task<List<User>> FilterByField(FilterJson json)
         {
-            throw new NotImplementedException();
+            var filter = Builders<User>.Filter.Eq(json.FieldName, json.FieldValue);
+            var result = await _users.Find(filter).ToListAsync();
+
+            return result;
         }
 
         public async Task<List<User>> SelectAll()

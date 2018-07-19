@@ -32,5 +32,12 @@ namespace gfX.Controllers
             return RedirectToAction("Index");   
         }
 
+        [HttpPost("filter")]
+        public async Task<IActionResult> Filter([FromBody]FilterJson json)
+        {
+            var filteredUsers = await userRepo.FilterByField(json);
+            return Ok(filteredUsers);
+        }
+
     }
 }
