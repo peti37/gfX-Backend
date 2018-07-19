@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using gfX.Models;
 using gfX.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 
 namespace gfX.Controllers
 {
@@ -30,6 +31,17 @@ namespace gfX.Controllers
         {
             await userRepo.Create(user);
             return RedirectToAction("Index");   
+        }
+
+        [HttpGet("login")]
+        public IActionResult Login(string returnUrl = "/")
+        {
+            return Challenge(new AuthenticationProperties() { RedirectUri = returnUrl });
+        }
+        [HttpGet("signin-login")]
+        public IActionResult Redirect()
+        {
+            return RedirectToAction("Index");
         }
 
     }
