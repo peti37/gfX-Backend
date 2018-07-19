@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using gfX.Models;
 using gfX.Interfaces;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace gfX.Controllers
 {
@@ -19,13 +20,10 @@ namespace gfX.Controllers
             this.userRepo = userRepo;
         }
 
+        [Authorize]
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login");
-            }
             var listOfUsers = await userRepo.SelectAll();
             return Ok(listOfUsers);
         }
@@ -43,11 +41,12 @@ namespace gfX.Controllers
             return Challenge(new AuthenticationProperties() { RedirectUri = returnUrl });
         }
 
-        //[HttpGet("signin-github")]
-        //public IActionResult Redirect()
-        //{
-        //    return RedirectToAction("Index");
-        //}
+        [Authorize]
+        [HttpGet("signin-github")]
+        public IActionResult Redirect()
+        {
+            return Ok("OKE");
+        }
 
     }
 }
