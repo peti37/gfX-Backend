@@ -22,6 +22,10 @@ namespace gfX.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login");
+            }
             var listOfUsers = await userRepo.SelectAll();
             return Ok(listOfUsers);
         }
@@ -38,11 +42,12 @@ namespace gfX.Controllers
         {
             return Challenge(new AuthenticationProperties() { RedirectUri = returnUrl });
         }
-        [HttpGet("signin-login")]
-        public IActionResult Redirect()
-        {
-            return RedirectToAction("Index");
-        }
+
+        //[HttpGet("signin-github")]
+        //public IActionResult Redirect()
+        //{
+        //    return RedirectToAction("Index");
+        //}
 
     }
 }
