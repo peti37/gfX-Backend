@@ -9,20 +9,32 @@ using System.Threading.Tasks;
 
 namespace gfX.Repositories
 {
-    public class UserRepository : ICrudRepositories<User>
+    public class GFXUserRepository : ICrudRepositories<GFXUser>
     {
         private IMongoClient _client;
         private IMongoDatabase _database;
-        private IMongoCollection<User> _users;
+        private IMongoCollection<GFXUser> _users;
 
-        public UserRepository()
+        public GFXUserRepository()
         {
             _client = new MongoClient("mongodb://localhost:27017");
             _database = _client.GetDatabase("gfX");
-            _users = _database.GetCollection<User>("users");
+            _users = _database.GetCollection<GFXUser>("users");
         }
 
-        public async Task Create(User user)
+        public async Task<bool> CheckUser(string fieldValue)
+        {
+            var filter = Builders<GFXUser>.Filter.Eq("githubHandle", fieldValue);
+            var result = await _users.Find(filter).ToListAsync();
+            if (result.Count == 0)
+            {
+                return true;
+            }
+            
+            return false;
+        }
+
+        public async Task Create(GFXUser user)
         {
             await _users.InsertOneAsync(user);
         }
@@ -33,20 +45,20 @@ namespace gfX.Repositories
         }
 
 
-        public async Task<List<User>> FilterByField(FilterJson json)
+        public async Task<List<GFXUser>> FilterByField(FilterJson json)
         {
-            var filter = Builders<User>.Filter.Eq(json.FieldName, json.FieldValue);
+            var filter = Builders<GFXUser>.Filter.Eq(json.FieldName, json.FieldValue);
             var result = await _users.Find(filter).ToListAsync();
 
             return result;
         }
 
-        public async Task<List<User>> SelectAll()
+        public async Task<List<GFXUser>> SelectAll()
         {
             return await _users.Find(new BsonDocument()).ToListAsync();
         }
 
-        public Task<User> SelectById(ObjectId id)
+        public Task<GFXUser> SelectById(ObjectId id)
         {
             throw new NotImplementedException();
         }

@@ -11,6 +11,7 @@ namespace gfX.Interfaces
         Task<T> SelectById(ObjectId id);
         Task<List<T>> SelectAll();
         Task<List<T>> FilterByField(FilterJson json);
+        Task<bool> CheckUser(string fieldValue);
         Task Update(ObjectId id, string updateFieldName, string updateFieldValue);
         Task Delete(ObjectId id);
     }
