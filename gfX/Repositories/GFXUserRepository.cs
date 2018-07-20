@@ -22,9 +22,9 @@ namespace gfX.Repositories
             _users = _database.GetCollection<GFXUser>("users");
         }
 
-        public async Task<bool> CheckUser(FilterJson json)
+        public async Task<bool> CheckUser(string fieldValue)
         {
-            var filter = Builders<GFXUser>.Filter.Eq(json.FieldName, json.FieldValue);
+            var filter = Builders<GFXUser>.Filter.Eq("githubHandle", fieldValue);
             var result = await _users.Find(filter).ToListAsync();
             if (result.Count == 0)
             {

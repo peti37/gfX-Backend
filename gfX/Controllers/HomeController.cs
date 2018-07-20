@@ -32,14 +32,15 @@ namespace gfX.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var listOfUsers = await userRepo.SelectAll(); 
-            if (userRepo.CheckUser(new FilterJson { FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value }).Result)
+            var listOfUsers = await userRepo.SelectAll();
+
+            if (userRepo.CheckUser(User.FindFirst(c => c.Type == "urn:github:login")?.Value).Result)
             {
                 await userRepo.Create(new GFXUser { Name = User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value, GithubHandle = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
- 
+                listOfUsers = await userRepo.SelectAll();
                 return Ok(listOfUsers);
             }
-
+            
             return Ok(listOfUsers);
         }
 
