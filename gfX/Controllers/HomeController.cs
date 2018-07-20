@@ -13,8 +13,9 @@ using Octokit;
 using Octokit.Internal;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 using System.Security.Claims;
-using Octokit;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using gfX.Repositories;
 
 namespace gfX.Controllers
 {
@@ -32,11 +33,22 @@ namespace gfX.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    return Ok("Home page for " + User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value);
-            //}
             var listOfUsers = await userRepo.SelectAll();
+            if (User.Identity.IsAuthenticated)
+            {
+                string accessToken = await HttpContext.GetTokenAsync("access_token");
+                var github = new GitHubClient(new ProductHeaderValue("fasz"), new InMemoryCredentialStore(new Credentials(accessToken)));
+                var Repositories = await github.Repository.GetAllForCurrent();
+                List<string> repoLinks = new List<string>();
+
+                for (int i = 0; i < Repositories.Count; i++)
+                {
+                   repoLinks.Add(Repositories[i].HtmlUrl);
+                }
+
+                await userRepo.Create(new Models.User { Name = "pityu", Repos = repoLinks });
+                return Ok(listOfUsers);
+            }
             return Ok(listOfUsers);
         }
 
@@ -51,6 +63,20 @@ namespace gfX.Controllers
         public IActionResult Login(string returnUrl = "/")
         {
             return Challenge(new AuthenticationProperties() { RedirectUri = returnUrl });
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task Logout()
+        {
+            await HttpContext.SignOutAsync("GitHub", new AuthenticationProperties
+            {
+                // Indicate here where Auth0 should redirect the user after a logout.
+                // Note that the resulting absolute Uri must be whitelisted in the 
+                // **Allowed Logout URLs** settings for the client.
+                RedirectUri = Url.Action("Index", "Home")
+            });
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         [HttpGet("signin-github")]

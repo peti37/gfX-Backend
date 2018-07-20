@@ -56,6 +56,9 @@ namespace gfX
                     options.ClaimActions.MapJsonKey("urn:github:login", "login");
                     options.ClaimActions.MapJsonKey("urn:github:url", "html_url");
                     options.ClaimActions.MapJsonKey("urn:github:avatar", "avatar_url");
+                    options.ClaimActions.MapJsonKey("urn:github:organizations", "organizations_url");
+                    options.ClaimActions.MapJsonKey("urn:github:company", "company");
+                    options.ClaimActions.MapJsonKey("urn:github:public_repos", "public_repos");
 
                     options.Events = new OAuthEvents
                     {

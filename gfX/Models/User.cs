@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace gfX.Models
         public string Name { get; set; }
         [BsonElement("hasJob")]
         public bool HasJob { get; set; }
-
+        [BsonElement("repos")]
+        public List<string> Repos { get; set; }
     }
 }
