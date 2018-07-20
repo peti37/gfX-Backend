@@ -13,13 +13,13 @@ namespace gfX.Repositories
     {
         private IMongoClient _client;
         private IMongoDatabase _database;
-        private IMongoCollection<Userke> _users;
+        private IMongoCollection<User> _users;
 
         public UserRepository()
         {
             _client = new MongoClient("mongodb://localhost:27017");
             _database = _client.GetDatabase("gfX");
-            _users = _database.GetCollection<Userke>("users");
+            _users = _database.GetCollection<User>("users");
         }
 
         public async Task Create(User user)

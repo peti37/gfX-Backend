@@ -74,7 +74,7 @@ namespace gfX
                         }
                     };
                 });
-            services.AddScoped<ICrudRepositories<Userke>, UserRepository>();
+            services.AddScoped<ICrudRepositories<User>, UserRepository>();
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()

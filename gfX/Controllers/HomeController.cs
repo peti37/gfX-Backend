@@ -21,9 +21,9 @@ namespace gfX.Controllers
 
     public class HomeController : Controller
     {
-        private ICrudRepositories<Models.Userke> userRepo;
+        private ICrudRepositories<Models.User> userRepo;
 
-        public HomeController(ICrudRepositories<Models.Userke> userRepo)
+        public HomeController(ICrudRepositories<Models.User> userRepo)
         {
             this.userRepo = userRepo;
         }
@@ -32,16 +32,16 @@ namespace gfX.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return Ok("Home page for " + User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value);
-            }
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    return Ok("Home page for " + User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value);
+            //}
             var listOfUsers = await userRepo.SelectAll();
             return Ok(listOfUsers);
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Index([FromBody]Models.Userke user)
+        public async Task<IActionResult> Index([FromBody]Models.User user)
         {
             await userRepo.Create(user);
             return RedirectToAction("Index");   
@@ -65,7 +65,8 @@ namespace gfX.Controllers
             {
                 return Ok("Home page for guest user." + ClaimTypes.Name);
             }
-        }   
+        }  
+        
         [HttpPost("filter")]
         public async Task<IActionResult> Filter([FromBody]FilterJson json)
         {

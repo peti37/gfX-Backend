@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace gfX.Models
 {
-    public class Userke
+    public class User
     {
         [BsonId]
         public ObjectId Id { get; set; }
