@@ -74,7 +74,7 @@ namespace gfX
                         }
                     };
                 });
-            services.AddScoped<ICrudRepositories<User>, UserRepository>();
+            services.AddScoped<ICrudRepositories<Userke>, UserRepository>();
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -96,7 +96,7 @@ namespace gfX
             }
 
             app.UseCors("MyPolicy");
-
+            app.UseAuthentication();
             app.UseStaticFiles();
 
             app.UseMvc();

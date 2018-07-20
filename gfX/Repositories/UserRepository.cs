@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace gfX.Repositories
 {
-    public class UserRepository : ICrudRepositories<User>
+    public class UserRepository : ICrudRepositories<Userke>
     {
         private IMongoClient _client;
         private IMongoDatabase _database;
-        private IMongoCollection<User> _users;
+        private IMongoCollection<Userke> _users;
 
         public UserRepository()
         {
             _client = new MongoClient("mongodb://localhost:27017");
             _database = _client.GetDatabase("gfX");
-            _users = _database.GetCollection<User>("users");
+            _users = _database.GetCollection<Userke>("users");
         }
 
-        public async Task Create(User user)
+        public async Task Create(Userke user)
         {
             await _users.InsertOneAsync(user);
         }
@@ -32,17 +32,17 @@ namespace gfX.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<User>> FilterByField(string fieldName, string fieldValue)
+        public Task<List<Userke>> FilterByField(string fieldName, string fieldValue)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<User>> SelectAll()
+        public async Task<List<Userke>> SelectAll()
         {
             return await _users.Find(new BsonDocument()).ToListAsync();
         }
 
-        public Task<User> SelectById(ObjectId id)
+        public Task<Userke> SelectById(ObjectId id)
         {
             throw new NotImplementedException();
         }
