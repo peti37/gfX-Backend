@@ -65,6 +65,13 @@ namespace gfX.Controllers
             {
                 return Ok("Home page for guest user." + ClaimTypes.Name);
             }
+        }   
+        [HttpPost("filter")]
+        public async Task<IActionResult> Filter([FromBody]FilterJson json)
+        {
+            var filteredUsers = await userRepo.FilterByField(json);
+            return Ok(filteredUsers);
+
         }
 
     }

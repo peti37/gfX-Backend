@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using gfX.Models;
+using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace gfX.Interfaces
         Task Create(T entity);
         Task<T> SelectById(ObjectId id);
         Task<List<T>> SelectAll();
-        Task<List<T>> FilterByField(string fieldName, string fieldValue);
+        Task<List<T>> FilterByField(FilterJson json);
         Task Update(ObjectId id, string updateFieldName, string updateFieldValue);
         Task Delete(ObjectId id);
     }
