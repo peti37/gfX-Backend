@@ -2,9 +2,11 @@
 using gfX.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Octokit.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace gfX.Repositories
@@ -54,6 +56,19 @@ namespace gfX.Repositories
         public Task Update(ObjectId id, string updateFieldName, string updateFieldValue)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<string>> EachRepo(string token)
+        {
+            var github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("fasz"), new InMemoryCredentialStore(new Octokit.Credentials(token)));
+            var Repositories = await github.Repository.GetAllForCurrent();
+            List<string> returnList = new List<string>();
+
+            for (int i = 0; i < Repositories.Count; i++)
+            {
+                returnList.Add(Repositories[i].HtmlUrl);
+            }
+            return returnList;
         }
     }
 }

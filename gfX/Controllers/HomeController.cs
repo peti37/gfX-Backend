@@ -37,16 +37,10 @@ namespace gfX.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 string accessToken = await HttpContext.GetTokenAsync("access_token");
-                var github = new GitHubClient(new ProductHeaderValue("fasz"), new InMemoryCredentialStore(new Credentials(accessToken)));
-                var Repositories = await github.Repository.GetAllForCurrent();
-                List<string> repoLinks = new List<string>();
-
-                for (int i = 0; i < Repositories.Count; i++)
-                {
-                   repoLinks.Add(Repositories[i].HtmlUrl);
-                }
-
-                await userRepo.Create(new Models.User { Name = "pityu", Repos = repoLinks });
+                //var github = new GitHubClient(new ProductHeaderValue("fasz"), new InMemoryCredentialStore(new Credentials(accessToken)));
+                //var Repositories = await github.Repository.GetAllForCurrent();
+                
+                await userRepo.Create(new Models.User { Name = "pityu", Repos = userRepo.EachRepo(accessToken).Result });
                 return Ok(listOfUsers);
             }
             return Ok(listOfUsers);

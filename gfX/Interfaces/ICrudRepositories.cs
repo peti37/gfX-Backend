@@ -13,5 +13,6 @@ namespace gfX.Interfaces
         Task<List<T>> FilterByField(FilterJson json);
         Task Update(ObjectId id, string updateFieldName, string updateFieldValue);
         Task Delete(ObjectId id);
+        Task<List<string>> EachRepo(string token);
     }
 }
