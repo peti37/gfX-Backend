@@ -13,13 +13,13 @@ namespace gfX.Repositories
     {
         private IMongoClient _client;
         private IMongoDatabase _database;
-        private IMongoCollection<User> _users;
+        private IMongoCollection<Userke> _users;
 
         public UserRepository()
         {
             _client = new MongoClient("mongodb://localhost:27017");
             _database = _client.GetDatabase("gfX");
-            _users = _database.GetCollection<User>("users");
+            _users = _database.GetCollection<Userke>("users");
         }
 
         public async Task Create(User user)
@@ -31,6 +31,7 @@ namespace gfX.Repositories
         {
             throw new NotImplementedException();
         }
+
 
         public async Task<List<User>> FilterByField(FilterJson json)
         {
