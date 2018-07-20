@@ -21,9 +21,9 @@ namespace gfX.Controllers
 
     public class HomeController : Controller
     {
-        private ICrudRepositories<Models.User> userRepo;
+        private ICrudRepositories<Models.GFXUser> userRepo;
 
-        public HomeController(ICrudRepositories<Models.User> userRepo)
+        public HomeController(ICrudRepositories<Models.GFXUser> userRepo)
         {
             this.userRepo = userRepo;
         }
@@ -32,16 +32,19 @@ namespace gfX.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    return Ok("Home page for " + User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value);
-            //}
-            var listOfUsers = await userRepo.SelectAll();
+            var listOfUsers = await userRepo.SelectAll(); 
+            if (userRepo.CheckUser(new FilterJson { FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value }).Result)
+            {
+                await userRepo.Create(new GFXUser { Name = User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value, GithubHandle = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
+ 
+                return Ok(listOfUsers);
+            }
+
             return Ok(listOfUsers);
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Index([FromBody]Models.User user)
+        public async Task<IActionResult> Index([FromBody]GFXUser user)
         {
             await userRepo.Create(user);
             return RedirectToAction("Index");   
@@ -52,20 +55,6 @@ namespace gfX.Controllers
         {
             return Challenge(new AuthenticationProperties() { RedirectUri = returnUrl });
         }
-
-        [HttpGet("signin-github")]
-        public IActionResult Redirect()
-        {
-
-            if (User.Identity.IsAuthenticated)
-            {
-                return Ok("Home page for " + User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value + ClaimTypes.Name);
-            }
-            else
-            {
-                return Ok("Home page for guest user." + ClaimTypes.Name);
-            }
-        }  
         
         [HttpPost("filter")]
         public async Task<IActionResult> Filter([FromBody]FilterJson json)
