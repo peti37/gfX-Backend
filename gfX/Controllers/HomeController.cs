@@ -33,8 +33,8 @@ namespace gfX.Controllers
         public async Task<IActionResult> Index()
         {
             var listOfUsers = await userRepo.SelectAll();
-
-            if (userRepo.CheckUser(User.FindFirst(c => c.Type == "urn:github:login")?.Value).Result)
+            bool isNewUser = userRepo.CheckUser(User.FindFirst(c => c.Type == "urn:github:login")?.Value).Result;
+            if (isNewUser)
             {
                 await userRepo.Create(new GFXUser { Name = User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value, GithubHandle = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
                 listOfUsers = await userRepo.SelectAll();
