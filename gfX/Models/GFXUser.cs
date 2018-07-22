@@ -20,5 +20,7 @@ namespace gfX.Models
         public bool HasJob { get; set; }
         [BsonElement("email")]
         public string Email { get; set; }
+        [BsonElement("repos")]
+        public List<string> Repos { get; set; }
     }
 }

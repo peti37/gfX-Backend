@@ -14,5 +14,6 @@ namespace gfX.Interfaces
         Task<bool> CheckUser(string fieldValue);
         Task Update(ObjectId id, string updateFieldName, string updateFieldValue);
         Task Delete(ObjectId id);
+        Task<List<string>> EachRepo(string token);
     }
 }
