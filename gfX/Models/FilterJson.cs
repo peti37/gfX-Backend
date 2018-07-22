@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace gfX.Models
 {
-    public class User
+    public class FilterJson
     {
+        public string FieldName { get; set; }
+        public string FieldValue { get; set; }
     }
 }
