@@ -15,5 +15,7 @@ namespace gfX.Interfaces
         Task Update(ObjectId id, string updateFieldName, string updateFieldValue);
         Task Delete(ObjectId id);
         Task<List<string>> EachRepo(string token);
+        Task<List<string>> Orgsozas(string token);
+
     }
 }

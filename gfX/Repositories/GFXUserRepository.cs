@@ -73,11 +73,26 @@ namespace gfX.Repositories
         {
             var github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("fasz"), new InMemoryCredentialStore(new Octokit.Credentials(token)));
             var Repositories = await github.Repository.GetAllForCurrent();
+
             List<string> returnList = new List<string>();
 
             for (int i = 0; i < Repositories.Count; i++)
             {
                 returnList.Add(Repositories[i].HtmlUrl);
+            }
+            return returnList;
+        }
+
+        public async Task<List<string>> Orgsozas(string token)
+        {
+            var github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("fasz"), new InMemoryCredentialStore(new Octokit.Credentials(token)));
+            var Orgsok = await github.Organization.GetAllForCurrent();
+
+            List<string> returnList = new List<string>();
+
+            for (int i = 0; i < Orgsok.Count; i++)
+            {
+                returnList.Add(Orgsok[i].Login);
             }
             return returnList;
         }

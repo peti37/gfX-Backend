@@ -37,7 +37,7 @@ namespace gfX.Controllers
             if (isNewUser)
             {
                 string accessToken = await HttpContext.GetTokenAsync("access_token");
-                await userRepo.Create(new GFXUser { Name = User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value, GithubHandle = User.FindFirst(c => c.Type == "urn:github:login")?.Value, Repos = userRepo.EachRepo(accessToken).Result, Email = User.FindFirst(c => c.Type == "urn:github:email")?.Value});
+                await userRepo.Create(new GFXUser { Name = User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value, GithubHandle = User.FindFirst(c => c.Type == "urn:github:login")?.Value, Repos = userRepo.EachRepo(accessToken).Result, Email = User.FindFirst(c => c.Type == "urn:github:email")?.Value, Orgs = userRepo.Orgsozas(accessToken).Result });
                 listOfUsers = await userRepo.SelectAll();
                 return Ok(listOfUsers);
             }
