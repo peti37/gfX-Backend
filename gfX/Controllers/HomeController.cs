@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using gfX.Models;
 using gfX.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.WindowsAzure.Storage;
-using Octokit;
-using Octokit.Internal;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 using System.Security.Claims;
-using Octokit;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace gfX.Controllers
 {
@@ -37,7 +28,7 @@ namespace gfX.Controllers
             if (isNewUser)
             {
                 string accessToken = await HttpContext.GetTokenAsync("access_token");
-                await userRepo.Create(new GFXUser { Name = User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value, GithubHandle = User.FindFirst(c => c.Type == "urn:github:login")?.Value, Repos = userRepo.EachRepo(accessToken).Result, Email = User.FindFirst(c => c.Type == "urn:github:email")?.Value, Orgs = userRepo.Orgsozas(accessToken).Result });
+                await userRepo.Create(new GFXUser { Name = User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value, GithubHandle = User.FindFirst(c => c.Type == "urn:github:login")?.Value, Repos = userRepo.EachRepo(accessToken).Result, Email = User.FindFirst(c => c.Type == "urn:github:email")?.Value, Orgs = userRepo.Orgsozas(accessToken).Result, Avatar = User.FindFirst(c => c.Type == "urn:github:avatar")?.Value });
                 listOfUsers = await userRepo.SelectAll();
                 return Ok(listOfUsers);
             }
@@ -64,6 +55,13 @@ namespace gfX.Controllers
             var filteredUsers = await userRepo.FilterByField(json);
             return Ok(filteredUsers);
 
+        }
+
+        [Authorize]
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            return Ok("Ne gyere ide!!!");
         }
 
     }

@@ -24,5 +24,7 @@ namespace gfX.Models
         public List<string> Repos { get; set; }
         [BsonElement("orgs")]
         public List<string> Orgs { get; set; }
+        [BsonElement("avatar")]
+        public string Avatar { get; set; }
     }
 }
