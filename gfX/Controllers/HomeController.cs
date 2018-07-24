@@ -12,9 +12,9 @@ namespace gfX.Controllers
 
     public class HomeController : Controller
     {
-        private ICrudRepositories<Models.GFXUser> userRepo;
+        private ICrudRepositories<GFXUser> userRepo;
 
-        public HomeController(ICrudRepositories<Models.GFXUser> userRepo)
+        public HomeController(ICrudRepositories<GFXUser> userRepo)
         {
             this.userRepo = userRepo;
         }
