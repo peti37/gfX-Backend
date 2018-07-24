@@ -36,13 +36,6 @@ namespace gfX.Controllers
             return Ok(listOfUsers);
         }
 
-        [HttpPost("")]
-        public async Task<IActionResult> Index([FromBody]GFXUser user)
-        {
-            await userRepo.Create(user);
-            return RedirectToAction("Index");   
-        }
-
         [HttpGet("login")]
         public IActionResult Login(string returnUrl = "/")
         {
@@ -62,6 +55,14 @@ namespace gfX.Controllers
         public IActionResult Logout()
         {
             return Ok("Ne gyere ide!!!");
+        }
+
+        [Authorize]
+        [HttpGet("profile")]
+        public IActionResult Profile()
+        {
+            var yourProfile = userRepo.FilterByField(new FilterJson {FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
+            return Json(yourProfile);
         }
 
     }

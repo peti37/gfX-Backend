@@ -1,5 +1,7 @@
-﻿using gfX.Interfaces;
+﻿using gfX.Entities;
+using gfX.Interfaces;
 using gfX.Models;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Octokit.Internal;
@@ -16,9 +18,9 @@ namespace gfX.Repositories
         private IMongoDatabase _database;
         private IMongoCollection<GFXUser> _users;
 
-        public GFXUserRepository()
+        public GFXUserRepository(IOptions<AppSettings> appSettings)
         {
-            _client = new MongoClient("mongodb://localhost:27017");
+            _client = new MongoClient(appSettings.Value.ConnectionString);
             _database = _client.GetDatabase("gfX");
             _users = _database.GetCollection<GFXUser>("users");
         }
