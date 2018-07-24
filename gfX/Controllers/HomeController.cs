@@ -6,30 +6,31 @@ using gfX.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using gfX.Services;
 
 namespace gfX.Controllers
 {
 
     public class HomeController : Controller
     {
-        private ICrudRepositories<Models.GFXUser> userRepo;
+        private GFXUserService userService;
 
-        public HomeController(ICrudRepositories<Models.GFXUser> userRepo)
+        public HomeController(GFXUserService userService)
         {
-            this.userRepo = userRepo;
+            this.userService = userService;
         }
 
         [Authorize]
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var listOfUsers = await userRepo.SelectAll();
-            bool isNewUser = userRepo.CheckUser(User.FindFirst(c => c.Type == "urn:github:login")?.Value).Result;
+            var listOfUsers = await userService.SelectAll();
+            bool isNewUser = userService.CheckUser(User.FindFirst(c => c.Type == "urn:github:login")?.Value).Result;
             if (isNewUser)
             {
                 string accessToken = await HttpContext.GetTokenAsync("access_token");
-                await userRepo.Create(new GFXUser { Name = User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value, GithubHandle = User.FindFirst(c => c.Type == "urn:github:login")?.Value, Repos = userRepo.EachRepo(accessToken).Result, Email = User.FindFirst(c => c.Type == "urn:github:email")?.Value, Orgs = userRepo.Orgsozas(accessToken).Result, Avatar = User.FindFirst(c => c.Type == "urn:github:avatar")?.Value });
-                listOfUsers = await userRepo.SelectAll();
+                await userService.Create(new GFXUser { Name = User.FindFirst(c => c.Type == ClaimTypes.Name)?.Value, GithubHandle = User.FindFirst(c => c.Type == "urn:github:login")?.Value, Repos = userService.EachRepo(accessToken).Result, Email = User.FindFirst(c => c.Type == "urn:github:email")?.Value, Orgs = userService.Orgsozas(accessToken).Result, Avatar = User.FindFirst(c => c.Type == "urn:github:avatar")?.Value });
+                listOfUsers = await userService.SelectAll();
                 return Ok(listOfUsers);
             }
             
@@ -40,14 +41,6 @@ namespace gfX.Controllers
         public IActionResult Login(string returnUrl = "/")
         {
             return Challenge(new AuthenticationProperties() { RedirectUri = returnUrl });
-        }
-        
-        [HttpPost("filter")]
-        public async Task<IActionResult> Filter([FromBody]FilterJson json)
-        {
-            var filteredUsers = await userRepo.FilterByField(json);
-            return Ok(filteredUsers);
-
         }
 
         [Authorize]
@@ -61,7 +54,7 @@ namespace gfX.Controllers
         [HttpGet("profile")]
         public IActionResult Profile()
         {
-            var yourProfile = userRepo.FilterByField(new FilterJson {FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
+            var yourProfile = userService.FilterByField(new FilterJson {FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
             return Json(yourProfile);
         }
 
