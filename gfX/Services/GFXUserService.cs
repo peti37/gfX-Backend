@@ -1,6 +1,7 @@
 ﻿using gfX.Interfaces;
 using gfX.Models;
 using gfX.Models.ViewModels;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,11 @@ namespace gfX.Services
                 }
             }
             return reposToShow;
+        }
+
+        public async Task Update(GFXUser user, FilterJson updateData)
+        {
+            await userRepo.Update(user, updateData);
         }
 
     }
