@@ -23,7 +23,7 @@ namespace gfX.Services
             var userList = await userRepo.SelectAll();
             for (int i = 0; i < userList.Count; i++)
             {
-                DTOlist.Add(new UserDTO { GithubHandle = userList[i].GithubHandle, Name = userList[i].Name, Avatar = userList[i].Avatar, Email = userList[i].Email, HasJob = userList[i].HasJob });
+                DTOlist.Add(new UserDTO { GithubHandle = userList[i].GithubHandle, Name = userList[i].Name, Avatar = userList[i].Avatar, Email = userList[i].Email, HasJob = userList[i].HasJob, ReposToShow = AddToVisible(userList[i].Repos) });
             }
 
             return DTOlist;
@@ -39,7 +39,7 @@ namespace gfX.Services
             return await userRepo.CheckUser(fieldValue);
         }
 
-        public async Task<List<string>> EachRepo(string token)
+        public async Task<List<Repo>> EachRepo(string token)
         {
             return await userRepo.EachRepo(token);
         }
@@ -52,6 +52,19 @@ namespace gfX.Services
         public async Task<List<GFXUser>> FilterByField(FilterJson json)
         {
             return await userRepo.FilterByField(json);
+        }
+
+        public List<string> AddToVisible(List<Repo> repos)
+        {
+            List<string> reposToShow = new List<string>();
+            for (int i = 0; i < repos.Count; i++)
+            {
+                if (repos[i].IsVisible)
+                {
+                    reposToShow.Add(repos[i].Url);
+                }
+            }
+            return reposToShow;
         }
 
     }
