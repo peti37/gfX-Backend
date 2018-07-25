@@ -26,7 +26,11 @@ namespace gfX.Models
         public List<string> Orgs { get; set; }
         [BsonElement("avatar")]
         public string Avatar { get; set; }
-        [BsonElement("Languages")]
+        [BsonElement("languages")]
         public List<string> Languages { get; set; }
+        [BsonElement("employer")]
+        public string Employer { get; set; }
+        [BsonElement("description")]
+        public string Description { get; set; }
     }
 }

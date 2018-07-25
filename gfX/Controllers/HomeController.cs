@@ -51,14 +51,6 @@ namespace gfX.Controllers
         }
 
         [Authorize]
-        [HttpGet("settings")]
-        public IActionResult Profile()
-        {
-            var yourProfile = userService.FilterByField(new FilterJson { FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
-            return Ok(yourProfile);
-        }
-
-        [Authorize]
         [HttpGet("profilesettings")]
         public IActionResult ProfileSettings()
         {
