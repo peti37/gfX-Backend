@@ -63,6 +63,11 @@ namespace gfX.Controllers
         public IActionResult ProfileSettings()
         {
             var yourProfile = userService.FilterByField(new FilterJson { FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
+            bool partOfOrg = yourProfile.Result[0].Orgs.Contains("KoztunkVannak");
+            if (!partOfOrg)
+            {
+                return RedirectToAction("index");
+            }
             return Ok(yourProfile);
         }
 
@@ -72,7 +77,7 @@ namespace gfX.Controllers
         {
             var yourProfile = userService.FilterByField(new FilterJson { FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
             await userService.Update(yourProfile.Result[0], friss);
-            return RedirectToAction("index");
+            return RedirectToAction("profilesettings");
         }
     }
 }
