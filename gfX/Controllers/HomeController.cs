@@ -72,7 +72,7 @@ namespace gfX.Controllers
         {
             var yourProfile = userService.FilterByField(new FilterJson { FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
             await userService.Update(yourProfile.Result[0], friss);
-            return RedirectToAction("index");
+            return RedirectToAction("profilesettings");
         }
     }
 }
