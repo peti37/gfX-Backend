@@ -12,5 +12,6 @@ namespace gfX.Models.ViewModels
         public bool HasJob { get; set; }
         public string Email { get; set; }
         public string Avatar { get; set; }
+        public List<string> ReposToShow { get; set; }
     }
 }

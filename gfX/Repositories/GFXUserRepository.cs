@@ -73,16 +73,16 @@ namespace gfX.Repositories
             var result = await _users.UpdateOneAsync(filter, update);
         }
 
-        public async Task<List<string>> EachRepo(string token)
+        public async Task<List<Repo>> EachRepo(string token)
         {
             var github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("fasz"), new InMemoryCredentialStore(new Octokit.Credentials(token)));
             var Repositories = await github.Repository.GetAllForCurrent();
 
-            List<string> returnList = new List<string>();
+            List<Repo> returnList = new List<Repo>();
 
             for (int i = 0; i < Repositories.Count; i++)
             {
-                returnList.Add(Repositories[i].HtmlUrl);
+                returnList.Add(new Repo { Url = Repositories[i].HtmlUrl });
             }
             return returnList;
         }

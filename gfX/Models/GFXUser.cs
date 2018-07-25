@@ -21,7 +21,7 @@ namespace gfX.Models
         [BsonElement("email")]
         public string Email { get; set; }
         [BsonElement("repos")]
-        public List<string> Repos { get; set; }
+        public List<Repo> Repos { get; set; }
         [BsonElement("orgs")]
         public List<string> Orgs { get; set; }
         [BsonElement("avatar")]
