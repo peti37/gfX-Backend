@@ -25,6 +25,7 @@ namespace gfX.Services
             {
                 DTOlist.Add(new UserDTO { GithubHandle = userList[i].GithubHandle, Name = userList[i].Name, Avatar = userList[i].Avatar, Email = userList[i].Email, HasJob = userList[i].HasJob });
             }
+
             return DTOlist;
         }
 
