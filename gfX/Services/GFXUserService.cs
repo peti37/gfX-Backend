@@ -1,5 +1,6 @@
 ﻿using gfX.Interfaces;
 using gfX.Models;
+using gfX.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,15 @@ namespace gfX.Services
             this.userRepo = userRepo;
         }
 
-        public async Task<List<GFXUser>> SelectAll()
+        public async Task<List<UserDTO>> SelectAll()
         {
-            return await userRepo.SelectAll();
+            List<UserDTO> DTOlist = new List<UserDTO>();
+            var userList = await userRepo.SelectAll();
+            for (int i = 0; i < userList.Count; i++)
+            {
+                DTOlist.Add(new UserDTO { GithubHandle = userList[i].GithubHandle, Name = userList[i].Name, Avatar = userList[i].Avatar, Email = userList[i].Email, HasJob = userList[i].HasJob });
+            }
+            return DTOlist;
         }
 
         public async Task Create(GFXUser user)
