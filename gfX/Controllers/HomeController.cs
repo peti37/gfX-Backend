@@ -33,7 +33,7 @@ namespace gfX.Controllers
                 listOfUsers = await userService.SelectAll();
                 return Ok(listOfUsers);
             }
-            
+
             return Ok(listOfUsers);
         }
 
@@ -54,9 +54,25 @@ namespace gfX.Controllers
         [HttpGet("profile")]
         public IActionResult Profile()
         {
-            var yourProfile = userService.FilterByField(new FilterJson {FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
-            return Json(yourProfile);
+            var yourProfile = userService.FilterByField(new FilterJson { FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
+            return Ok(yourProfile);
         }
 
+        [Authorize]
+        [HttpGet("profilesettings")]
+        public IActionResult ProfileSettings()
+        {
+            var yourProfile = userService.FilterByField(new FilterJson { FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
+            return Ok(yourProfile);
+        }
+
+        [Authorize]
+        [HttpPost("profilesettings")]
+        public async Task<IActionResult> ProfileSettingsPost([FromBody] FilterJson friss)
+        {
+            var yourProfile = userService.FilterByField(new FilterJson { FieldName = "githubHandle", FieldValue = User.FindFirst(c => c.Type == "urn:github:login")?.Value });
+            await userService.Update(yourProfile.Result[0], friss);
+            return RedirectToAction("index");
+        }
     }
 }
