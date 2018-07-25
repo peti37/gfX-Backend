@@ -66,9 +66,11 @@ namespace gfX.Repositories
             throw new NotImplementedException();
         }
 
-        public Task Update(ObjectId id, string updateFieldName, string updateFieldValue)
+        public async Task Update(GFXUser user, FilterJson updateData)
         {
-            throw new NotImplementedException();
+            var update = Builders<GFXUser>.Update.Set(updateData.FieldName, updateData.FieldValue);
+            var filter = Builders<GFXUser>.Filter.Eq("_id", user.Id);
+            var result = await _users.UpdateOneAsync(filter, update);
         }
 
         public async Task<List<string>> EachRepo(string token)

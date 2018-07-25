@@ -12,7 +12,7 @@ namespace gfX.Interfaces
         Task<List<T>> SelectAll();
         Task<List<T>> FilterByField(FilterJson json);
         Task<bool> CheckUser(string fieldValue);
-        Task Update(ObjectId id, string updateFieldName, string updateFieldValue);
+        Task Update(GFXUser user, FilterJson updateData);
         Task Delete(ObjectId id);
         Task<List<string>> EachRepo(string token);
         Task<List<string>> Orgsozas(string token);
